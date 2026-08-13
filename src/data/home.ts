@@ -1,8 +1,24 @@
 export const rabbitHoles = [
-  { date: "Aug 13, 2026", title: "Building a Pocket E-Reader" },
-  { date: "Aug 07, 2026", title: "Decentralisation" },
-  { date: "Aug 07, 2026", title: "Peer-to-Peer Networks" },
-  { date: "Jul 15, 2026", title: "Setting Up a Home Server" },
+  {
+    date: "Aug 13, 2026",
+    title: "Building a Pocket E-Reader",
+    slug: "building-a-pocket-e-reader",
+  },
+  {
+    date: "Aug 07, 2026",
+    title: "Decentralisation",
+    slug: "decentralisation",
+  },
+  {
+    date: "Aug 07, 2026",
+    title: "Peer-to-Peer Networks",
+    slug: "peer-to-peer-networks",
+  },
+  {
+    date: "Jul 15, 2026",
+    title: "Setting Up a Home Server",
+    slug: "setting-up-a-home-server",
+  },
 ];
 
 export const creations = [
