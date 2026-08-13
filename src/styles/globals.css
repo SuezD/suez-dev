@@ -69,15 +69,15 @@ a:hover {
 -------------------------------------------------- */
 
 .page {
-  width: 100%;
+  width: min(100% - 64px, 1080px);
   min-height: 100dvh;
 
-  padding:
-    var(--page-padding-y)
-    var(--page-padding-x);
+  margin-inline: auto;
 
   display: flex;
   flex-direction: column;
+
+  padding-block: 36px;
 }
 
 /* --------------------------------------------------

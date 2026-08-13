@@ -1,5 +1,6 @@
 :root {
   --main-min-gap: 32px;
+  --main-max-gap: 12800px;
 }
 
 /* --------------------------------------------------
@@ -12,17 +13,20 @@
 }
 
 .home-page main {
-  flex: 1 1 0;
+  flex: 1 1 auto;
 
   width: 100%;
-  min-width: 0;
-  min-height: 0;
+  max-width: 1080px;
 
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
 
-  justify-content: space-between;
-  gap: var(--main-min-gap);
+  gap: clamp(
+    var(--main-min-gap),
+    10vh,
+    var(--main-max-gap)
+  );
 }
 
 /* --------------------------------------------------
@@ -122,7 +126,7 @@
 
 .ask-bar:focus-within {
   outline: 1px solid var(--color-text);
-  outline-offset: 2px;
+  outline-offset: -4px;
 }
 
 /* --------------------------------------------------
