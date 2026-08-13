@@ -5,6 +5,7 @@
   --color-muted: #929292;
   --color-border: #272727;
   --color-accent: #34b8f5;
+  --color-error: red;
 
   /* Layout */
   --page-padding-x: 64px;
