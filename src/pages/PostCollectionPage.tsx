@@ -10,6 +10,9 @@ export function PostCollectionPage() {
       <Header />
 
       <main className="archive-main">
+        <Link to="/" className="post-back">
+          ← home
+        </Link>
         <header className="archive-header">
           <h1>Rabbit Holes</h1>
 

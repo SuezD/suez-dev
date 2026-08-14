@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
 import { creations } from "../data/home";
@@ -8,6 +9,9 @@ export function IdeasPage() {
       <Header />
 
       <main className="archive-main">
+        <Link to="/" className="post-back">
+          ← home
+        </Link>
         <header className="archive-header">
           <h1>Creations & Ideas</h1>
 
