@@ -41,3 +41,8 @@ export const work = [
     dates: "Jul 2023 - Jan 2025",
   },
 ];
+
+export const status = {
+  state: "building" as const,
+  text: "pocket e-reader",
+};

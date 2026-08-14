@@ -64,6 +64,18 @@
   font-weight: 500;
 }
 
+.cursor {
+  display: inline-block;
+  margin-left: 0.1em;
+  animation: cursor-blink 1s steps(1) infinite;
+}
+
+@keyframes cursor-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
 /* --------------------------------------------------
    ASK ME
 -------------------------------------------------- */

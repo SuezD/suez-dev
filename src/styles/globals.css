@@ -86,9 +86,6 @@ a:hover {
 -------------------------------------------------- */
 
 .header {
-  flex: 0 0 auto;
-  width: 100%;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -99,15 +96,35 @@ a:hover {
   font-weight: 500;
 }
 
-.nav {
+.status {
   display: flex;
   align-items: center;
-  gap: 48px;
+  gap: 0.5rem;
+
+  color: var(--color-muted);
+  font-size: 13px;
 }
 
-.nav a {
-  font-size: 16px;
-  font-weight: 500;
+.status-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+}
+
+.status-dot-building {
+  background: #22c55e;
+}
+
+.status-dot-learning {
+  background: #3b82f6;
+}
+
+.status-dot-writing {
+  background: #f59e0b;
+}
+
+.status-dot-idle {
+  background: #9ca3af;
 }
 
 /* --------------------------------------------------

@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { AskBar } from "../components/AskBar";
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
+import { Hero } from "../components/Hero";
 import { Section } from "../components/Section";
 
 import {
@@ -17,10 +18,7 @@ export function HomePage() {
       <Header />
 
       <main>
-        <section className="hero">
-          <h1>Hi, I’m Suez.</h1>
-          <p>Forever Learning & building things</p>
-        </section>
+        <Hero />
 
         <AskBar />
 
