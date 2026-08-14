@@ -11,6 +11,7 @@ type Message = {
 };
 
 const WORKER_URL = "https://suez-dev-llm-chat-app.suez-dirie.workers.dev/api/chat";
+const SAMPLE_QUESTION = "What are you working on right now?";
 
 export function AskBar() {
   const askSectionRef = useRef<HTMLElement>(null);
@@ -23,6 +24,15 @@ export function AskBar() {
   const [error, setError] = useState<string | null>(null);
 
   const messagesRef = useRef<HTMLDivElement>(null);
+
+  function handleInputKeyDown(
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) {
+    if (event.key === "Tab" && !question.trim()) {
+      event.preventDefault();
+      setQuestion(SAMPLE_QUESTION);
+    }
+  }
 
   useEffect(() => {
     const container = messagesRef.current;
@@ -188,10 +198,11 @@ export function AskBar() {
           id="question"
           value={question}
           onChange={(event) => setQuestion(event.target.value)}
+          onKeyDown={handleInputKeyDown}
           placeholder={
             hasStartedChat
               ? "Ask something else..."
-              : "What are you working on right now?"
+              : SAMPLE_QUESTION
           }
         />
 
