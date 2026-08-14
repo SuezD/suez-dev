@@ -1,6 +1,6 @@
 ---
 title: Building a Pocket E-Reader
-date: 2026-08-13
+date: 2026-08-14
 description: Building a tiny e-paper reader from scratch.
 tags: hardware, esp32, e-paper
 ---

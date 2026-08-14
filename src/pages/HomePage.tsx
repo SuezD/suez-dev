@@ -4,13 +4,15 @@ import { AskBar } from "../components/AskBar";
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
 import { Hero } from "../components/Hero";
+import { posts } from "../content/posts";
 import { Section } from "../components/Section";
 
 import {
   creations,
-  rabbitHoles,
   work,
 } from "../data/home";
+
+const recentRabbitHoles = posts.slice(0, 3);
 
 export function HomePage() {
   return (
@@ -28,14 +30,14 @@ export function HomePage() {
             className="rabbit-holes"
           >
             <div className="rabbit-list">
-              {rabbitHoles.map((item) => (
+              {recentRabbitHoles.map((post) => (
                 <Link
                   className="rabbit-item"
-                  to={`/learn/${item.slug}`}
-                  key={item.slug}
+                  to={`/learn/${post.slug}`}
+                  key={post.slug}
                 >
-                  <time>{item.date}</time>
-                  <span>{item.title}</span>
+                  <time>{post.date}</time>
+                  <span>{post.title}</span>
                 </Link>
               ))}
             </div>
