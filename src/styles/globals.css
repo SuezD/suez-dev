@@ -76,7 +76,7 @@ a:hover {
   display: flex;
   flex-direction: column;
 
-  padding-bottom: 36px;
+  padding-block: 36px;
 }
 
 /* --------------------------------------------------
@@ -84,18 +84,9 @@ a:hover {
 -------------------------------------------------- */
 
 .header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  height: 72px;
-  padding-top: 36px;
-
-  background: var(--color-bg);
 }
 
 .logo {
@@ -174,10 +165,6 @@ a:hover {
   :root {
     --page-padding-x: 20px;
     --page-padding-y: 24px;
-  }
-
-  .header {
-    align-items: flex-start;
   }
 
   .logo {
