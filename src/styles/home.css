@@ -64,6 +64,11 @@
   font-weight: 500;
 }
 
+.hero-tagline {
+  min-height: 1.5em;
+  line-height: 1.5;
+}
+
 .cursor {
   display: inline-block;
   margin-left: 0.1em;

@@ -23,7 +23,6 @@ export function HomePage() {
         <AskBar />
 
         <div className="home-sections">
-          {/* Recent Rabbit Holes */}
           <Section
             title="Recent Rabbit Holes"
             className="rabbit-holes"
@@ -45,11 +44,10 @@ export function HomePage() {
               className="more-link"
               to="/learn"
             >
-              View All Projects and Learnings →
+              View All Rabbit Holes →
             </Link>
           </Section>
 
-          {/* Creations */}
           <Section
             title="Creations & Ideas"
             className="creations"
@@ -79,7 +77,6 @@ export function HomePage() {
             </Link>
           </Section>
 
-          {/* Work */}
           <Section
             title="What I’m Working On"
             className="work"
@@ -101,12 +98,13 @@ export function HomePage() {
               ))}
             </div>
 
-            <Link
+            <a
               className="more-link"
-              to="/work"
+              href={`${import.meta.env.BASE_URL}suez-dirie-cv.pdf`}
+              download="Suez-Dirie-CV.pdf"
             >
-              View CV →
-            </Link>
+              Download CV →
+            </a>
           </Section>
         </div>
       </main>

@@ -4,27 +4,27 @@ export const rabbitHoles = [
     title: "Building a Pocket E-Reader",
     slug: "building-a-pocket-e-reader",
   },
-  {
-    date: "Aug 07, 2026",
-    title: "Decentralisation",
-    slug: "decentralisation",
-  },
-  {
-    date: "Aug 07, 2026",
-    title: "Peer-to-Peer Networks",
-    slug: "peer-to-peer-networks",
-  },
-  {
-    date: "Jul 15, 2026",
-    title: "Setting Up a Home Server",
-    slug: "setting-up-a-home-server",
-  },
+  // {
+  //   date: "Aug 07, 2026",
+  //   title: "Decentralisation",
+  //   slug: "decentralisation",
+  // },
+  // {
+  //   date: "Aug 07, 2026",
+  //   title: "Peer-to-Peer Networks",
+  //   slug: "peer-to-peer-networks",
+  // },
+  // {
+  //   date: "Jul 15, 2026",
+  //   title: "Setting Up a Home Server",
+  //   slug: "setting-up-a-home-server",
+  // },
 ];
 
 export const creations = [
   {
     title: "Sudoku",
-    description: "Some description of the site",
+    description: "A simple Sudoku game built with React and TypeScript.",
     href: "https://Suezd.github.io/sudoku",
   },
 ];

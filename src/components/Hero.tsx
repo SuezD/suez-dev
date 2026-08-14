@@ -56,7 +56,7 @@ export function Hero() {
         )}
       </h1>
 
-      <p>
+      <p className="hero-tagline">
         {typedTagline}
         {stage !== "title" && (
           <span className="cursor" aria-hidden="true">
