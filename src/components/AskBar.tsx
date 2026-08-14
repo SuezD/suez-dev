@@ -2,76 +2,137 @@ import {
   useEffect,
   useRef,
   useState,
+  type SubmitEvent,
 } from "react";
 
-import { useNavigate } from "react-router";
+type Message = {
+  role: "user" | "assistant";
+  content: string;
+};
 
-import { useChat } from "../chat/ChatContext";
-import { ChatComposer } from "./ChatComposer";
-import { ChatMessages } from "./ChatMessages";
-
-const CHAT_VIEWPORT_GAP = 24;
-const MOBILE_QUERY = "(max-width: 600px)";
+const WORKER_URL = "https://suez-dev-llm-chat-app.suez-dirie.workers.dev/api/chat";
+const SAMPLE_QUESTION = "What are you working on right now?";
 
 export function AskBar() {
-  const navigate = useNavigate();
+  const askSectionRef = useRef<HTMLElement>(null);
+  const [chatMaxHeight, setChatMaxHeight] = useState<number>();
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const { messages } = useChat();
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [question, setQuestion] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const askSectionRef =
-    useRef<HTMLElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
 
-  const [chatMaxHeight, setChatMaxHeight] =
-    useState<number>();
-
-  const hasStartedChat =
-    messages.length > 0;
+  function handleInputKeyDown(
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) {
+    if (event.key === "Tab" && !question.trim()) {
+      event.preventDefault();
+      setQuestion(SAMPLE_QUESTION);
+    }
+  }
 
   useEffect(() => {
-    if (
-      !hasStartedChat ||
-      !askSectionRef.current
-    ) {
+    const container = messagesRef.current;
+    if (!container) return;
+
+    container.scrollTo({
+      top: container.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [messages, isLoading]);
+
+  async function handleSubmit(
+    event: SubmitEvent<HTMLFormElement>,
+  ) {
+    event.preventDefault();
+
+    const text = question.trim();
+
+    if (!text || isLoading) {
       return;
     }
 
-    function updateChatHeight() {
+    const nextMessages: Message[] = [
+      ...messages,
+      {
+        role: "user",
+        content: text,
+      },
+    ];
+
+    setMessages(nextMessages);
+    setQuestion("");
+    setError(null);
+    setIsLoading(true);
+
+    requestAnimationFrame(() => {
+      inputRef.current?.focus();
+    });
+
+    try {
+      const response = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: nextMessages,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Request failed with status ${response.status}`,
+        );
+      }
+
+      const data: { answer: string } =
+        await response.json();
+
+      setMessages([
+        ...nextMessages,
+        {
+          role: "assistant",
+          content: data.answer,
+        },
+      ]);
+    } catch (error) {
+      console.error(error);
+      setError("Something went wrong. Try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const hasStartedChat = messages.length > 0;
+
+  useEffect(() => {
+    if (!hasStartedChat || !askSectionRef.current) return;
+
+    const updateChatHeight = () => {
       if (!askSectionRef.current) return;
 
       const top =
-        askSectionRef.current
-          .getBoundingClientRect()
-          .top;
+        askSectionRef.current.getBoundingClientRect().top;
+
+      const viewportGap = 24;
 
       setChatMaxHeight(
-        window.innerHeight -
-          top -
-          CHAT_VIEWPORT_GAP,
+        window.innerHeight - top - viewportGap
       );
-    }
+    };
 
     updateChatHeight();
 
-    window.addEventListener(
-      "resize",
-      updateChatHeight,
-    );
+    window.addEventListener("resize", updateChatHeight);
 
     return () => {
-      window.removeEventListener(
-        "resize",
-        updateChatHeight,
-      );
+      window.removeEventListener("resize", updateChatHeight);
     };
   }, [hasStartedChat]);
-
-  function handleInputFocus() {
-    if (
-      window.matchMedia(MOBILE_QUERY).matches
-    ) {
-      navigate("/chat");
-    }
-  }
 
   return (
     <section
@@ -81,9 +142,7 @@ export function AskBar() {
       }`}
       style={
         hasStartedChat && chatMaxHeight
-          ? {
-              maxHeight: `${chatMaxHeight}px`,
-            }
+          ? { maxHeight: `${chatMaxHeight}px` }
           : undefined
       }
     >
@@ -94,12 +153,67 @@ export function AskBar() {
       )}
 
       {hasStartedChat && (
-        <ChatMessages />
+        <div
+          ref={messagesRef}
+          className="chat-messages"
+          aria-live="polite"
+        >
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`chat-message ${message.role}`}
+            >
+              <span className="chat-message-author">
+                {message.role === "user"
+                  ? "You"
+                  : "Suez AI"}
+              </span>
+
+              <p>{message.content}</p>
+            </div>
+          ))}
+
+          {isLoading && (
+            <div className="chat-message assistant">
+              <span className="chat-message-author">
+                Suez AI
+              </span>
+
+              <p>typing...</p>
+            </div>
+          )}
+
+          {error && (
+            <p className="chat-error">{error}</p>
+          )}
+        </div>
       )}
 
-      <ChatComposer
-        onFocus={handleInputFocus}
-      />
+      <form
+        className="ask-bar"
+        onSubmit={handleSubmit}
+      >
+        <input
+          ref={inputRef}
+          id="question"
+          value={question}
+          onChange={(event) => setQuestion(event.target.value)}
+          onKeyDown={handleInputKeyDown}
+          placeholder={
+            hasStartedChat
+              ? "Ask something else..."
+              : SAMPLE_QUESTION
+          }
+        />
+
+        <button
+          type="submit"
+          aria-label="Ask question"
+          disabled={isLoading}
+        >
+          →
+        </button>
+      </form>
     </section>
   );
 }

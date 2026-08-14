@@ -1,58 +1,48 @@
 import { useEffect, useState } from "react";
 
-const TITLE = "Hi, I’m Suez.";
-const TAGLINE = "Forever learning & building things.";
-const ANIMATION_KEY = "hero-animation-played";
+const title = "Hi, I’m Suez.";
+const tagline = "Forever learning & building things.";
 
 export function Hero() {
-  const hasAnimated =
-    sessionStorage.getItem(ANIMATION_KEY) === "true";
-
-  const [typedTitle, setTypedTitle] = useState(
-    hasAnimated ? TITLE : "",
-  );
-
-  const [typedTagline, setTypedTagline] = useState(
-    hasAnimated ? TAGLINE : "",
-  );
-
-  const [stage, setStage] = useState<
-    "title" | "tagline" | "done"
-  >(hasAnimated ? "done" : "title");
+  const [typedTitle, setTypedTitle] = useState("");
+  const [typedTagline, setTypedTagline] = useState("");
+  const [stage, setStage] = useState<"title" | "tagline" | "done">("title");
 
   useEffect(() => {
-    if (stage === "done") return;
+    if (stage === "title") {
+      let index = 0;
 
-    const text = stage === "title" ? TITLE : TAGLINE;
-    const setText =
-      stage === "title"
-        ? setTypedTitle
-        : setTypedTagline;
+      const interval = window.setInterval(() => {
+        index += 1;
+        setTypedTitle(title.slice(0, index));
 
-    let index = 0;
+        if (index >= title.length) {
+          window.clearInterval(interval);
 
-    const interval = window.setInterval(() => {
-      index += 1;
-      setText(text.slice(0, index));
+          window.setTimeout(() => {
+            setStage("tagline");
+          }, 250);
+        }
+      }, 80);
 
-      if (index < text.length) return;
+      return () => window.clearInterval(interval);
+    }
 
-      window.clearInterval(interval);
+    if (stage === "tagline") {
+      let index = 0;
 
-      if (stage === "title") {
-        window.setTimeout(() => {
-          setStage("tagline");
-        }, 250);
-      } else {
-        setStage("done");
-        sessionStorage.setItem(
-          ANIMATION_KEY,
-          "true",
-        );
-      }
-    }, stage === "title" ? 55 : 40);
+      const interval = window.setInterval(() => {
+        index += 1;
+        setTypedTagline(tagline.slice(0, index));
 
-    return () => window.clearInterval(interval);
+        if (index >= tagline.length) {
+          window.clearInterval(interval);
+          setStage("done");
+        }
+      }, 60);
+
+      return () => window.clearInterval(interval);
+    }
   }, [stage]);
 
   return (
