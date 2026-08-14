@@ -38,10 +38,7 @@ export function AskBar() {
     const container = messagesRef.current;
     if (!container) return;
 
-    container.scrollTo({
-      top: container.scrollHeight,
-      behavior: "smooth",
-    });
+    container.scrollTop = container.scrollHeight;
   }, [messages, isLoading]);
 
   async function handleSubmit(
@@ -63,7 +60,14 @@ export function AskBar() {
       },
     ];
 
-    setMessages(nextMessages);
+    setMessages([
+      ...nextMessages,
+      {
+        role: "assistant",
+        content: "",
+      },
+    ]);
+
     setQuestion("");
     setError(null);
     setIsLoading(true);
@@ -89,19 +93,83 @@ export function AskBar() {
         );
       }
 
-      const data: { answer: string } =
-        await response.json();
+      if (!response.body) {
+        throw new Error("Response body is missing");
+      }
 
-      setMessages([
-        ...nextMessages,
-        {
-          role: "assistant",
-          content: data.answer,
-        },
-      ]);
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+
+      let buffer = "";
+
+      while (true) {
+        const { value, done } = await reader.read();
+
+        if (done) break;
+
+        buffer += decoder.decode(value, {
+          stream: true,
+        });
+
+        const events = buffer.split("\n\n");
+
+        // Keep the incomplete final event for the next chunk.
+        buffer = events.pop() ?? "";
+
+        for (const event of events) {
+          const line = event
+            .split("\n")
+            .find((line) =>
+              line.startsWith("data:"),
+            );
+
+          if (!line) continue;
+
+          const data = line
+            .slice("data:".length)
+            .trim();
+
+          if (data === "[DONE]") {
+            continue;
+          }
+
+          const parsed = JSON.parse(data) as {
+            response?: string;
+          };
+
+          if (!parsed.response) {
+            continue;
+          }
+
+          setMessages((currentMessages) => {
+            const updated = [...currentMessages];
+            const lastIndex = updated.length - 1;
+
+            const assistantMessage =
+              updated[lastIndex];
+
+            if (
+              assistantMessage?.role ===
+              "assistant"
+            ) {
+              updated[lastIndex] = {
+                ...assistantMessage,
+                content:
+                  assistantMessage.content +
+                  parsed.response,
+              };
+            }
+
+            return updated;
+          });
+        }
+      }
     } catch (error) {
       console.error(error);
-      setError("Something went wrong. Try again.");
+
+      setError(
+        "Something went wrong. Try again.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -169,20 +237,25 @@ export function AskBar() {
                   : "Suez AI"}
               </span>
 
-              <p>{message.content}</p>
+              <p>
+                {message.content ? (
+                  message.content
+                ) : (
+                  isLoading &&
+                  index === messages.length - 1 && (
+                    <span className="thinking">
+                      thinking
+                      <span className="thinking-dots" aria-hidden="true">
+                        <span>.</span>
+                        <span>.</span>
+                        <span>.</span>
+                      </span>
+                    </span>
+                  )
+                )}
+              </p>
             </div>
           ))}
-
-          {isLoading && (
-            <div className="chat-message assistant">
-              <span className="chat-message-author">
-                Suez AI
-              </span>
-
-              <p>typing...</p>
-            </div>
-          )}
-
           {error && (
             <p className="chat-error">{error}</p>
           )}
