@@ -19,7 +19,7 @@ export function HomePage() {
       <main>
         <section className="hero">
           <h1>Hi, I’m Suez.</h1>
-          <p>Learning as I go, building as I learn.</p>
+          <p>Forever Learning & building things</p>
         </section>
 
         <AskBar />

@@ -36,8 +36,8 @@ export const work = [
     dates: "Feb 2025 - present",
   },
   {
-    company: "Ecolec",
+    company: "Ecotec",
     role: "Software Engineer",
-    dates: "Jul 2024 - Jan 2025",
+    dates: "Jul 2023 - Jan 2025",
   },
 ];

@@ -5,11 +5,11 @@ export function Header() {
         suez.dev
       </a>
 
-      <nav className="nav" aria-label="Main navigation">
+      {/* <nav className="nav" aria-label="Main navigation">
         <a href="/work">work</a>
         <a href="/learn">learn</a>
         <a href="/notes">notes</a>
-      </nav>
+      </nav> */}
     </header>
   );
 }
