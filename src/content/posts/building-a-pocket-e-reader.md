@@ -44,7 +44,7 @@ Once I'd stripped the hardware down to its bare components, I did the same with 
 - reading books offline
 - deleting books to free up space
 - tracking progress across several books
-- bookmarking pages
+- tracking the last opened book
 
 I decided that downloading over Wi-Fi made the most sense.
 
@@ -145,27 +145,81 @@ It worked perfectly.
 
 That was probably the most satisfying moment of the project so far. I'd gone from a few buttons and some text on an Arduino Uno to actually reading a book on a device I'd built myself.
 
-## Next steps
+## Feature development
 
-There are still quite a few things that need work before I'd consider the software finished.
+Now that I'd gotten the ESP32 working, it was time to actually build the software.
 
-- [ ] Redesign the UI — the text is currently too big and the interface doesn't feel very sleek
-- [ ] Fetch books over Wi-Fi from a server
-- [ ] Implement bookmarking
-- [ ] Finish the remaining pages
-- [ ] Improve navigation and overall UX
+This was a massive chunk of the entire project. I'd put together a simple design, but implementing all of the features while following good architectural practices as I built out the software would take some time.
 
-## Far in the future
+I used ChatGPT to plan the development out in stages based on my MVP, then implemented each stage with Codex.
 
-Once the software is in a decent place, I'll start worrying about making the thing look like an actual e-reader.
+As a reminder, my MVP was:
 
-- [ ] Design and 3D print a case
-- [ ] Design and print a custom PCB
-- [ ] Test the battery and charging setup
-- [ ] Move from the development hardware to the final compact components
+- download books over Wi-Fi
+- read books offline
+- delete books to free up space
+- track progress across several books
+- track the last opened book
 
-For now, though, I have an e-reader.
+When developing with an AI agent, it becomes pretty foolish to ask it to build everything in one go. Codex still required some babysitting, and I wanted to keep track of the changes it was making before committing them.
 
-It isn't pretty, it isn't small and it definitely isn't finished.
+This ultimately involved a lot of refactoring, but was still a lot easier than developing it all myself.
 
-But it works.
+The development stages went roughly like this:
+
+- build the base components: header, footer and content
+- build the pages: startup, main menu and its sub-pages
+- add button functionality: lists of options and the ability to navigate between pages by selecting them
+
+That was the basics done. I then moved on to the more complex features:
+
+- display a book from a `.txt` file stored locally
+- navigate pages, track reading progress and remember the last opened book
+- connect to Wi-Fi using a development file containing network details and remember known networks
+- connect to Wi-Fi through a server hosted by the ESP32, using another device to enter the network details — avoiding the nightmare of typing a Wi-Fi password with three e-reader buttons
+- start a local development server to serve `.txt` files
+- fetch a manifest from the server and download books
+- improve diagnostics and feedback to the user
+
+Once I'd tested everything with a `.txt` file roughly the size of a medium-to-long book, feature development was done!
+
+I've also been trying to keep track of roughly how long this project is taking me. So far:
+
+- Arduino Uno and e-paper POC: ~4–8 hours
+- ESP32-S3 setup and testing: ~3–5 hours
+- Feature development: ~16 hours
+- **Total so far: ~23–29 hours**
+
+The earlier stages are very rough estimates, but I'm curious to see how much time I've spent on the entire thing once it's finished.
+
+I still didn't love the design, but it was good enough to be functional. After fiddling with it for a while, I'd decided it was taking up more time than I was willing to spend on it for now. I'd come back to it once I had the basic functional product in a production-ready state.
+
+That got me thinking about software updates.
+
+It'd be a pain to connect the e-reader to my PC every time I wanted to update the code. Then it hit me: with Wi-Fi already configured, I could have the e-reader fetch its own updates.
+
+For now, though, I'd come back to that as a nice extra.
+
+## What's left
+
+At this point, the actual feature development is basically complete. There are only a couple of software decisions left:
+
+- [ ] Figure out how I want to host the book server
+- [ ] Implement a way to configure the server URL and other settings in case they change
+
+With my recent interest in home servers, I already knew I wanted to run a private book server. I just had to figure out exactly how.
+
+Most of the remaining work is now hardware:
+
+- [ ] Buy and connect a battery
+- [ ] Test charging and switching the device on and off
+- [ ] Implement hold Select to sleep/power
+- [ ] Figure out the final e-paper display wiring without the development module
+- [ ] Decide whether I actually need a custom PCB
+- [ ] Design and print the enclosure
+
+The project has changed quite a bit since I first wrote my "next steps". The software I thought was still far away is now mostly done, and I've reached the point where I need to turn the collection of boards, wires and buttons on my desk into an actual e-reader.
+
+For now, though, I have a working e-reader that can download books over Wi-Fi, store them locally and remember where I left off.
+
+That's a pretty good place to be.
